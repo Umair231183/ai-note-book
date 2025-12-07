@@ -1,4 +1,7 @@
 {
-  "installCommand": "cd docusaurus_app && npm install",
-  "buildCommand": "cd docusaurus_app && npm run build"
+  "build": {
+    "installCommand": "cd docusaurus_app && npm install",
+    "buildCommand": "cd docusaurus_app && npm run build",
+    "outputDirectory": "docusaurus_app/build" // Specify Docusaurus build output directory
+  }
 }
