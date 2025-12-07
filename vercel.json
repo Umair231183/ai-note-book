@@ -1,0 +1,9 @@
+{
+  "build": {
+    "env": {
+      "SKIP_INSTALL": "true"
+    },
+    "command": "cd docusaurus_app && npm install && npm run build",
+    "directory": "docusaurus_app"
+  }
+}
