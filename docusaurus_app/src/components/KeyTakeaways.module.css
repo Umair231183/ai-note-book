@@ -1,0 +1,23 @@
+.keyTakeaways {
+  margin-top: 2rem;
+  background-color: var(--ifm-background-color);
+  border: 1px solid var(--ifm-color-primary-darkest); /* Slightly different border for distinction */
+  border-radius: var(--ifm-border-radius);
+  box-shadow: var(--ifm-shadow-md);
+}
+
+.keyTakeaways h3 {
+  color: var(--ifm-color-primary);
+  margin-bottom: 0.5rem;
+  font-size: 1.25rem;
+}
+
+.keyTakeaways ul {
+  list-style-type: '👉 '; /* Custom bullet point */
+  padding-left: 1.5rem;
+}
+
+.keyTakeaways li {
+  margin-bottom: 0.5rem;
+  line-height: var(--ifm-line-height-base);
+}

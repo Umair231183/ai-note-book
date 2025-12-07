@@ -1,0 +1,414 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "PAHR RAG Chatbot and Personalization API",
+    "version": "1.0.0",
+    "description": "API for the Physical AI & Humanoid Robotics Textbook's RAG Chatbot and optional personalization features."
+  },
+  "servers": [
+    {
+      "url": "/api",
+      "description": "Default server"
+    }
+  ],
+  "paths": {
+    "/query": {
+      "post": {
+        "summary": "Query the RAG Chatbot",
+        "operationId": "queryChatbot",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "question": {
+                    "type": "string",
+                    "description": "The user's question about the textbook content."
+                  }
+                },
+                "required": [
+                  "question"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response from the chatbot.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "llm_answer": {
+                      "type": "string",
+                      "description": "The generated answer from the RAG system."
+                    },
+                    "source_documents": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "description": "List of chapter/section references used to generate the answer."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input provided."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+      }
+    },
+    "/ask-selected": {
+      "post": {
+        "summary": "Ask question based on selected text",
+        "operationId": "askSelectedText",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "selected_text": {
+                    "type": "string",
+                    "description": "The text selected by the user in the textbook."
+                  },
+                  "question": {
+                    "type": "string",
+                    "description": "The user's question related to the selected text."
+                  }
+                },
+                "required": [
+                  "selected_text",
+                  "question"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response from the chatbot based on selected text.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChatbotResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input provided."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+      }
+    },
+    "/ingest-content": {
+      "post": {
+        "summary": "Ingest textbook content (Admin/Internal)",
+        "operationId": "ingestContent",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "chapter_id": {
+                    "type": "string",
+                    "description": "Unique ID of the chapter being ingested."
+                  },
+                  "content_markdown": {
+                    "type": "string",
+                    "description": "Full Markdown content of the chapter."
+                  }
+                },
+                "required": [
+                  "chapter_id",
+                  "content_markdown"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Content ingested successfully."
+          },
+          "401": {
+            "description": "Unauthorized (requires admin credentials)."
+          },
+          "500": {
+            "description": "Internal server error during ingestion."
+          }
+        }
+      }
+    },
+    "/user/preferences": {
+      "post": {
+        "summary": "Update user preferences (Bonus)",
+        "operationId": "updateUserPreferences",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "user_id": {
+                    "type": "string",
+                    "description": "The ID of the user."
+                  },
+                  "preference_type": {
+                    "type": "string",
+                    "description": "Type of preference (e.g., 'language', 'experience_level')."
+                  },
+                  "value": {
+                    "type": "string",
+                    "description": "Value of the preference (e.g., 'ur', 'intermediate')."
+                  },
+                  "chapter_id": {
+                    "type": "string",
+                    "description": "Optional chapter ID if preference is specific to a chapter."
+                  }
+                },
+                "required": [
+                  "user_id",
+                  "preference_type",
+                  "value"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User preferences updated successfully."
+          },
+          "400": {
+            "description": "Invalid preference data."
+          }
+        }
+      },
+      "get": {
+        "summary": "Get user preferences (Bonus)",
+        "operationId": "getUserPreferences",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the user."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User preferences retrieved successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "description": "Dictionary of user preferences."
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found."
+          }
+        }
+      }
+    },
+    "/auth/signup": {
+      "post": {
+        "summary": "User registration (Bonus)",
+        "operationId": "userSignup",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "description": "User's email address."
+                  },
+                  "password": {
+                    "type": "string",
+                    "format": "password",
+                    "description": "User's chosen password."
+                  },
+                  "experience_level": {
+                    "type": "string",
+                    "description": "User's experience level (e.g., Beginner, Intermediate)."
+                  }
+                },
+                "required": [
+                  "email",
+                  "password"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User registered successfully."
+          },
+          "400": {
+            "description": "Invalid registration data or email already exists."
+          }
+        }
+      }
+    },
+    "/auth/signin": {
+      "post": {
+        "summary": "User login (Bonus)",
+        "operationId": "userSignin",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email"
+                  },
+                  "password": {
+                    "type": "string",
+                    "format": "password"
+                  }
+                },
+                "required": [
+                  "email",
+                  "password"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User logged in successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "access_token": {
+                      "type": "string"
+                    },
+                    "token_type": {
+                      "type": "string",
+                      "default": "bearer"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid credentials."
+          }
+        }
+      }
+    },
+    "/translate/chapter": {
+      "post": {
+        "summary": "Translate a chapter to Urdu (Bonus)",
+        "operationId": "translateChapterToUrdu",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "chapter_id": {
+                    "type": "string",
+                    "description": "ID of the chapter to translate."
+                  },
+                  "content_markdown": {
+                    "type": "string",
+                    "description": "Markdown content to translate."
+                  }
+                },
+                "required": [
+                  "chapter_id",
+                  "content_markdown"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Chapter translated successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "translated_content": {
+                      "type": "string",
+                      "description": "The translated Markdown content in Urdu."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Translation service error."
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ChatbotResponse": {
+        "type": "object",
+        "properties": {
+          "llm_answer": {
+            "type": "string",
+            "description": "The generated answer from the RAG system."
+          },
+          "source_documents": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "List of chapter/section references used to generate the answer."
+          }
+        },
+        "required": [
+          "llm_answer"
+        ]
+      }
+    }
+  }
+}

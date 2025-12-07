@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+python-multipart # required for FastAPI
+langchain
+openai # RAGChatbot uses OpenAIEmbeddings and OpenAI LLM
+python-dotenv
+qdrant-client
+langchain-openai
+langchain-community
+psycopg2-binary

@@ -1,0 +1,23 @@
+.chapterSummary {
+  margin-top: 2rem;
+  background-color: var(--ifm-background-color);
+  border: 1px solid var(--ifm-table-border-color);
+  border-radius: var(--ifm-border-radius);
+  box-shadow: var(--ifm-shadow-md);
+}
+
+.chapterSummary h3 {
+  color: var(--ifm-color-primary);
+  margin-bottom: 0.5rem;
+  font-size: 1.25rem;
+}
+
+.chapterSummary ul {
+  list-style-type: disc;
+  padding-left: 1.5rem;
+}
+
+.chapterSummary li {
+  margin-bottom: 0.5rem;
+  line-height: var(--ifm-line-height-base);
+}

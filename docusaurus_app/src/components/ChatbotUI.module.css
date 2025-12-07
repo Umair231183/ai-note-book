@@ -1,0 +1,115 @@
+.chatbotContainer {
+  max-width: 600px;
+  margin: 20px auto;
+  border: 1px solid var(--ifm-toc-border-color);
+  border-radius: var(--ifm-border-radius);
+  padding: 16px;
+  font-family: var(--ifm-font-family-base);
+  display: flex;
+  flex-direction: column;
+  height: 70vh;
+  background-color: var(--ifm-background-color);
+  color: var(--ifm-font-color-base);
+}
+
+.messageHistory {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding: 8px;
+  border-bottom: 1px solid var(--ifm-toc-border-color);
+  margin-bottom: 16px;
+}
+
+.message {
+  margin-bottom: 12px;
+  padding: 8px 12px;
+  border-radius: 18px;
+  max-width: 80%;
+  word-wrap: break-word;
+}
+
+.userMessage {
+  background-color: var(--ifm-color-primary);
+  color: white;
+  align-self: flex-end;
+  margin-left: auto;
+}
+
+.botMessage {
+  background-color: var(--ifm-color-emphasis-100);
+  color: var(--ifm-font-color-base);
+  align-self: flex-start;
+}
+
+.inputForm {
+  display: flex;
+  margin-top: auto;
+}
+
+.inputField {
+  flex-grow: 1;
+  padding: 8px;
+  border: 1px solid var(--ifm-toc-border-color);
+  border-radius: var(--ifm-border-radius);
+  background-color: var(--ifm-background-color);
+  color: var(--ifm-font-color-base);
+}
+
+.sendButton {
+  padding: 8px 16px;
+  border: none;
+  background-color: var(--ifm-color-primary);
+  color: white;
+  border-radius: var(--ifm-border-radius);
+  margin-left: 8px;
+  cursor: pointer;
+}
+
+.sendButton:disabled {
+  background-color: var(--ifm-color-secondary-light);
+  cursor: not-allowed;
+}
+
+.loadingMessage {
+  font-style: italic;
+  color: var(--ifm-color-secondary-dark);
+}
+
+/* Selected text indication */
+.selectedTextDisplay {
+  padding: 8px;
+  background-color: var(--ifm-color-primary-lightest);
+  border-left: 3px solid var(--ifm-color-primary);
+  margin-bottom: 8px;
+  border-radius: var(--ifm-border-radius);
+  color: var(--ifm-font-color-base);
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .chatbotContainer {
+    max-width: 100%;
+    margin: 0;
+    height: 90vh; /* Take more height on smaller screens */
+    border-radius: 0;
+    border: none;
+  }
+}
+
+.sourceCitations {
+  font-size: 0.8rem;
+  margin-top: 5px;
+  padding-top: 5px;
+  border-top: 1px dashed var(--ifm-toc-border-color);
+  color: var(--ifm-font-color-secondary);
+}
+
+.sourceCitations ul {
+  list-style-type: none;
+  padding-left: 0;
+  margin-top: 5px;
+}
+
+.sourceCitations li {
+  margin-bottom: 3px;
+}

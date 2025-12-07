@@ -1,0 +1,55 @@
+/**
+ * Any CSS you add here will be applied to all pages of your Docusaurus site.
+ */
+
+/* You can override the default Infima variables here. */
+:root {
+  --ifm-color-primary: #25c2a0;
+  --ifm-color-primary-dark: #21af90;
+  --ifm-color-primary-darker: #1fa588;
+  --ifm-color-primary-darkest: #1a8870;
+  --ifm-color-primary-light: #29d5b0;
+  --ifm-color-primary-lighter: #32d8b4;
+  --ifm-color-primary-lightest: #4fddbf;
+  --ifm-code-font-size: 95%;
+
+  /* Custom typography settings for readability */
+  --ifm-font-size-base: 17px; /* Between 16-18px */
+  --ifm-line-height-base: 1.6; /* For good readability */
+
+  /* High contrast adjustments */
+  --ifm-font-color-base: #222; /* Darker text for better contrast */
+  --ifm-background-color: #fff; /* White background for content */
+}
+
+/* For dark mode */
+html[data-theme='dark'] {
+  --ifm-color-primary: #25c2a0;
+  --ifm-color-primary-dark: #21af90;
+  --ifm-color-primary-darker: #1fa588;
+  --ifm-color-primary-darkest: #1a8870;
+  --ifm-color-primary-light: #29d5b0;
+  --ifm-color-primary-lighter: #32d8b4;
+  --ifm-color-primary-lightest: #4fddbf;
+
+  --ifm-font-color-base: #eee; /* Lighter text for dark contrast */
+  --ifm-background-color: #1a1a1a; /* Dark background */
+}
+
+.docusaurus-highlight-edits {
+  background-color: rgb(255, 229, 100);
+}
+
+/* Ensure text in content areas uses base font size and line height */
+.markdown p, .markdown li, .markdown h1, .markdown h2, .markdown h3, .markdown h4, .markdown h5, .markdown h6 {
+  font-size: var(--ifm-font-size-base);
+  line-height: var(--ifm-line-height-base);
+}
+
+/* Adjust heading sizes to scale appropriately */
+.markdown h1 { font-size: calc(var(--ifm-font-size-base) * 2.25); }
+.markdown h2 { font-size: calc(var(--ifm-font-size-base) * 1.75); }
+.markdown h3 { font-size: calc(var(--ifm-font-size-base) * 1.5); }
+.markdown h4 { font-size: calc(var(--ifm-font-size-base) * 1.25); }
+.markdown h5 { font-size: calc(var(--ifm-font-size-base) * 1.1); }
+.markdown h6 { font-size: var(--ifm-font-size-base); }

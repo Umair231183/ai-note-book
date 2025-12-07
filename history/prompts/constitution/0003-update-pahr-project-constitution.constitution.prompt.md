@@ -1,17 +1,14 @@
-<!--
-Sync Impact Report:
-Version change: (none) -> 1.0.0
-Modified principles: All principles/articles are new, replacing generic template placeholders.
-Added sections: All user-provided Articles (I-X, Final Article) are added as new content.
-Removed sections: The generic 'Core Principles', '[SECTION_2_NAME]', and '[SECTION_3_NAME]' sections from the template have been replaced.
-Templates requiring updates:
-- .specify/templates/plan-template.md: ⚠ pending
-- .specify/templates/spec-template.md: ⚠ pending
-- .specify/templates/tasks-template.md: ⚠ pending
-- .specify/templates/commands/*.md: ⚠ pending
-Follow-up TODOs: None
--->
-# Physical AI & Humanoid Robotics Project Constitution
+--- 
+id: 0003
+title: Update PAHR Project Constitution
+stage: constitution
+date: 2025-12-06
+surface: agent
+model: gemini-1.5-pro
+feature: none
+branch: main
+user: (unknown)
+command: "/sp.constitution 📘 CONSTITUTION OF THE PHYSICAL AI & HUMANOID ROBOTICS PROJECT
 Preamble
 
 This Constitution establishes the structure, purpose, and guiding principles for the Physical AI & Humanoid Robotics Book, hereafter referred to as PAHR Project.
@@ -315,5 +312,3 @@ Open knowledge philosophy
 🎉 Constitution Completed
 
 This is now a professional, clean, polished constitution that makes your project look like a top-tier robotics curriculum.
-
-**Version**: 1.0.0 | **Ratified**: 2025-12-06 | **Last Amended**: 2025-12-06

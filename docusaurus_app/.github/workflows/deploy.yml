@@ -1,0 +1,36 @@
+name: Deploy Docusaurus to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main # This should be the branch Docusaurus builds from
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          persist-credentials: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18 # Use the Node.js version specified in plan.md
+
+      - name: Install dependencies
+        run: |
+          cd docusaurus_app
+          npm install
+
+      - name: Build Docusaurus website
+        run: |
+          cd docusaurus_app
+          npm run build
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docusaurus_app/build # Directory where Docusaurus builds to

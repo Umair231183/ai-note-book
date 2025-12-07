@@ -1,0 +1,87 @@
+.toggleContainer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 1rem;
+  padding: 0.8rem;
+  background-color: var(--ifm-background-surface-color);
+  border-radius: var(--ifm-border-radius);
+  border: 1px solid var(--ifm-toc-border-color);
+}
+
+.labelText {
+  font-weight: bold;
+  color: var(--ifm-font-color-base);
+}
+
+.statusText {
+  font-size: 0.85em;
+  color: var(--ifm-color-secondary-dark);
+}
+
+.errorText {
+  color: var(--ifm-color-danger);
+}
+
+/* The switch - the box around the slider */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 45px;
+  height: 25px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--ifm-color-gray-500);
+  transition: .4s;
+  -webkit-transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 19px;
+  width: 19px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: .4s;
+  -webkit-transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: var(--ifm-color-primary);
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px var(--ifm-color-primary);
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(20px);
+  -ms-transform: translateX(20px);
+  transform: translateX(20px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 25px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}

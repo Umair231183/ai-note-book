@@ -1,0 +1,14 @@
+.floatButton {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  font-size: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--ifm-shadow-md);
+  z-index: 1000; /* Ensure it's above other content */
+}
