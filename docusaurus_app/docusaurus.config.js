@@ -6,8 +6,8 @@ const darkCodeTheme = themes.dracula;
 const config = {
   title: 'AI’s Impact on K-12 Classroom Efficiency',
   tagline: 'Research Paper and Resources',
-  url: 'https://Umair231183.github.io', // Your GitHub Pages URL
-  baseUrl: process.env.NODE_ENV === 'production' ? '/ai-robotic-book-hackatone-01/' : '/', // Your repo name for GitHub Pages
+  url: 'https://your-vercel-deployment-url.vercel.app', // Update with your Vercel deployment URL
+  baseUrl: '/',
   onBrokenLinks: 'throw',
   customFields: {
     metadata: [{name: 'keywords', content: 'AI, K-12 Education, Classroom Efficiency, Research Paper, RAG Chatbot, Docusaurus'}],
