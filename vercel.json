@@ -1,4 +1,4 @@
 {
-  "installCommand": "npm install",
-  "buildCommand": "npm run build"
+  "installCommand": "cd docusaurus_app && npm install",
+  "buildCommand": "cd docusaurus_app && npm run build"
 }
