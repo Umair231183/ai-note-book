@@ -8,18 +8,187 @@
   text-align: center;
   position: relative;
   overflow: hidden;
-  background-color: var(--ifm-color-primary); /* Use Docusaurus primary color */
-  color: white; /* Ensure text is readable on primary background */
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  color: white;
+}
+
+.heroContent {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.heroDescription {
+  font-size: 1.2rem;
+  margin: 1.5rem 0;
+  line-height: 1.6;
+  opacity: 0.9;
+}
+
+.buttons {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
 }
 
 @media screen and (max-width: 996px) {
   .heroBanner {
     padding: 2rem;
   }
+
+  .buttons {
+    flex-direction: column;
+  }
 }
 
-.buttons {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.introSection {
+  padding: 4rem 0;
+  background-color: #f0f8ff;
+}
+
+.featureCard {
+  background: white;
+  border-radius: 8px;
+  padding: 2rem;
+  height: 100%;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  text-align: center;
+}
+
+.featureCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+.featureCard h3 {
+  color: #1e3a8a;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.featureCard p {
+  color: #374151;
+  line-height: 1.6;
+}
+
+.researchSection {
+  padding: 4rem 0;
+  background: linear-gradient(135deg, #f0f8ff 0%, #e6f4ff 100%);
+}
+
+.sectionTitle {
+  text-align: center;
+  color: #1e3a8a;
+  margin-bottom: 2.5rem;
+  font-size: 2rem;
+  position: relative;
+}
+
+.sectionTitle::after {
+  content: '';
+  display: block;
+  width: 80px;
+  height: 4px;
+  background: linear-gradient(90deg, #4facfe, #00f2fe);
+  margin: 0.5rem auto;
+  border-radius: 2px;
+}
+
+.translatableText {
+  position: relative;
+  cursor: text;
+}
+
+.translatableText:hover {
+  background-color: rgba(79, 172, 254, 0.1);
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.keyFindingsContainer {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.findingsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.findingCard {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  text-align: center;
+  border: 1px solid #eef2f7;
+}
+
+.findingCard:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+}
+
+.findingIcon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.findingCard h3 {
+  color: #1e3a8a;
+  margin: 0.5rem 0 1rem 0;
+  font-size: 1.2rem;
+  position: relative;
+  font-weight: 600;
+}
+
+.findingCard p {
+  color: #374151;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Color theme for feature cards */
+.featureCard {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  height: 100%;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  text-align: center;
+  border: 1px solid #eef2f7;
+  position: relative;
+  overflow: hidden;
+}
+
+.featureCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #4facfe, #00f2fe);
+}
+
+.featureCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+}
+
+.featureCard h3 {
+  color: #1e3a8a;
+  margin-bottom: 1rem;
+  font-size: 1.4rem;
+}
+
+.featureCard p {
+  color: #374151;
+  line-height: 1.7;
 }

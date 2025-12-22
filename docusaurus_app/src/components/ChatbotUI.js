@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import styles from './ChatbotUI.module.css'; // Import CSS module
 import clsx from 'clsx'; // For conditional class names
-import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
+import { useApiService } from './ApiService';
 
 // Placeholder for a hook that would detect selected text globally.
 // In a real implementation, this would involve DOM listeners.
@@ -31,11 +31,10 @@ const useSelectedText = () => {
 
 
 const ChatbotUI = () => {
-  const {siteConfig} = useDocusaurusContext();
-  const API_BASE_URL = siteConfig.customFields.FASTAPI_BASE_URL || ''; // Use customFields
+  const { query, askSelected } = useApiService();
 
   const [messages, setMessages] = useState([
-    { sender: 'bot', text: 'Hello! Ask me a question about the research paper.' }
+    { sender: 'bot', text: 'Hello! I\'m your AI research assistant. Ask me anything about the research paper.' }
   ]);
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -50,77 +49,86 @@ const ChatbotUI = () => {
     if (!inputValue.trim()) return;
 
     const userMessage = { sender: 'user', text: inputValue };
-    setMessages(prevMessages => [...prevMessages, userMessage]);
     setInputValue('');
     setIsLoading(true);
 
-    let apiPath = '/api/query';
-    let requestBody = { question: inputValue };
-
-    if (selectedText) {
-      apiPath = '/api/ask-selected';
-      requestBody = {
-        selected_text: selectedText,
-        question: inputValue,
-      };
-    }
+    // Add user and bot messages, then make the API call
+    setMessages(prevMessages => {
+      const newMessages = [...prevMessages];
+      newMessages.push(userMessage); // Add user message at index: prevMessages.length
+      newMessages.push({ sender: 'bot', text: '', sourceDocuments: [] }); // Add bot message at index: prevMessages.length + 1
+      return newMessages;
+    });
 
     try {
-      const response = await fetch(`${API_BASE_URL}${apiPath}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(requestBody),
-      });
+      // Use a callback to get the correct index after the state is updated
+      // We'll add the messages first, then perform the API call
+      // Calculate the index for the bot message: current messages + user message + bot message = current + 2
+      // So the bot message will be at index: messages.length + 1 (since we add user first, then bot)
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      // Handle streaming response
-      const reader = response.body.getReader();
-      const decoder = new TextDecoder();
-      let receivedText = '';
-      let botMessageIndex = messages.length; // Index for the new bot message
-
-      // Add a new empty message for streaming
-      setMessages(prevMessages => [...prevMessages, { sender: 'bot', text: '', sourceDocuments: [] }]);
-
-      while (true) {
-        const { value, done } = await reader.read();
-        if (done) break;
-
-        const chunk = decoder.decode(value, { stream: true });
-        receivedText += chunk;
-
-        setMessages(prevMessages => {
-          const newMessages = [...prevMessages];
-          // Update the last message (which is the one currently streaming)
-          if (newMessages[botMessageIndex]) {
-            newMessages[botMessageIndex].text = receivedText;
-          }
-          return newMessages;
+      // For streaming, we need to make the API call with streaming but also get the full response
+      // First, make the call with streaming to update the UI in real-time
+      let response;
+      if (selectedText) {
+        // Use ask-selected endpoint when text is selected
+        response = await askSelected(selectedText, inputValue, (updatedText) => {
+          setMessages(prevMessages => {
+            const newMessages = [...prevMessages];
+            // The bot message is at the last index
+            if (newMessages.length > 0) {
+              const botMsgIndex = newMessages.length - 1;
+              if (newMessages[botMsgIndex] && newMessages[botMsgIndex].sender === 'bot') {
+                newMessages[botMsgIndex].text = updatedText;
+              }
+            }
+            return newMessages;
+          });
+        });
+      } else {
+        // Use query endpoint for general questions
+        response = await query(inputValue, (updatedText) => {
+          setMessages(prevMessages => {
+            const newMessages = [...prevMessages];
+            // The bot message is at the last index
+            if (newMessages.length > 0) {
+              const botMsgIndex = newMessages.length - 1;
+              if (newMessages[botMsgIndex] && newMessages[botMsgIndex].sender === 'bot') {
+                newMessages[botMsgIndex].text = updatedText;
+              }
+            }
+            return newMessages;
+          });
         });
       }
 
-      // After streaming, fetch the full JSON to get source_documents if available
-      // Note: This approach assumes the backend sends full JSON after stream.
-      // A more robust streaming solution would send metadata (like sources) via stream too.
-      const finalData = await response.json(); // Re-read response body (might not work if already read by reader)
-                                              // This is a placeholder, a true streaming setup would integrate sources into the stream
+      // Update the final message with the complete response including source documents
       setMessages(prevMessages => {
-          const newMessages = [...prevMessages];
-          if (newMessages[botMessageIndex]) {
-              newMessages[botMessageIndex].sourceDocuments = finalData.source_documents || [];
+        const newMessages = [...prevMessages];
+        // The bot message is at the last index
+        if (newMessages.length > 0) {
+          const botMsgIndex = newMessages.length - 1;
+          if (newMessages[botMsgIndex]) {
+            newMessages[botMsgIndex].text = response.text;
+            newMessages[botMsgIndex].sourceDocuments = response.sourceDocuments || [];
           }
-          return newMessages;
+        }
+        return newMessages;
       });
 
     } catch (error) {
       console.error("Failed to fetch from chatbot API:", error);
       const errorMessage = { sender: 'bot', text: 'Sorry, I am having trouble connecting to my brain. Please try again later.' };
-      setMessages(prevMessages => [...prevMessages, errorMessage]);
+      setMessages(prevMessages => {
+        // Update the last (incomplete) bot message with the error message
+        const newMessages = [...prevMessages];
+        if (newMessages.length > 0) {
+          const lastMessageIndex = newMessages.length - 1;
+          if (newMessages[lastMessageIndex].sender === 'bot') {
+            newMessages[lastMessageIndex] = errorMessage;
+          }
+        }
+        return newMessages;
+      });
     } finally {
       setIsLoading(false);
     }
@@ -128,30 +136,69 @@ const ChatbotUI = () => {
 
   return (
     <div className={styles.chatbotContainer}>
+      <div className={styles.chatHeader}>
+        <div className={styles.headerContent}>
+          <div className={styles.botAvatar}>🤖</div>
+          <div>
+            <h3>AI Research Assistant</h3>
+            <p className={styles.statusText}>Online • Ready to help</p>
+          </div>
+        </div>
+      </div>
       <div className={styles.messageHistory}>
         {messages.map((msg, index) => (
           <div
             key={index}
             className={clsx(styles.message, msg.sender === 'user' ? styles.userMessage : styles.botMessage)}
           >
-            {msg.text}
-            {msg.sourceDocuments && msg.sourceDocuments.length > 0 && (
-              <div className={styles.sourceCitations}>
-                <strong>Sources:</strong>
-                <ul>
-                  {msg.sourceDocuments.map((source, srcIndex) => (
-                    <li key={srcIndex}>{source}</li>
-                  ))}
-                </ul>
+            {msg.sender === 'user' ? (
+              <div className={styles.userMessageContent}>
+                <div className={styles.messageText}>{msg.text}</div>
+                <div className={styles.messageTime}>
+                  {new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                </div>
+              </div>
+            ) : (
+              <div className={styles.botMessageContent}>
+                <div className={styles.botAvatarSmall}>🤖</div>
+                <div className={styles.messageText}>
+                  {msg.text}
+                  {msg.sourceDocuments && msg.sourceDocuments.length > 0 && (
+                    <div className={styles.sourceCitations}>
+                      <strong>Sources:</strong>
+                      <ul>
+                        {msg.sourceDocuments.map((source, srcIndex) => (
+                          <li key={srcIndex} className={styles.sourceItem}>📄 {source}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </div>
+                <div className={styles.messageTime}>
+                  {new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                </div>
               </div>
             )}
           </div>
         ))}
-        {isLoading && <div className={clsx(styles.message, styles.botMessage, styles.loadingMessage)}>Thinking...</div>}
+        {isLoading && (
+          <div className={clsx(styles.message, styles.botMessage)}>
+            <div className={styles.botMessageContent}>
+              <div className={styles.botAvatarSmall}>🤖</div>
+              <div className={styles.messageText}>
+                <div className={styles.typingIndicator}>
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
       {selectedText && (
         <div className={styles.selectedTextDisplay}>
-          Asking about selected text: <strong>"{selectedText.substring(0, 50)}..."</strong>
+          <small>Asking about: <strong>"{selectedText.substring(0, 50)}{selectedText.length > 50 ? '...' : ''}"</strong></small>
         </div>
       )}
       <form onSubmit={handleSendMessage} className={styles.inputForm}>
@@ -160,11 +207,11 @@ const ChatbotUI = () => {
           value={inputValue}
           onChange={handleInputChange}
           className={styles.inputField}
-          placeholder="Type your question..."
+          placeholder="Ask a question about the research paper..."
           disabled={isLoading}
         />
         <button type="submit" className={styles.sendButton} disabled={isLoading}>
-          Send
+          ✨
         </button>
       </form>
     </div>

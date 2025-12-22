@@ -4,13 +4,13 @@ const darkCodeTheme = themes.dracula;
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: 'AI’s Impact on K-12 Classroom Efficiency',
+  title: 'Physical AI & Humanoid Robotics',
   tagline: 'Research Paper and Resources',
-  url: 'https://ai-note-book-my6l3w0ks-hafizmuhammadumairs-projects.vercel.app',
-  baseUrl: '/',
+  url: 'https://Umair231183.github.io',
+  baseUrl: '/ai-notebook-frontend/',
   onBrokenLinks: 'throw',
   customFields: {
-    metadata: [{name: 'keywords', content: 'AI, K-12 Education, Classroom Efficiency, Research Paper, RAG Chatbot, Docusaurus'}],
+    metadata: [{name: 'keywords', content: 'Physical AI & Humanoid Robotics, Classroom Efficiency, Research Paper, RAG Chatbot, Docusaurus'}],
     FASTAPI_BASE_URL: process.env.FASTAPI_BASE_URL || '', // Expose to client-side
   },
   markdown: {
@@ -40,6 +40,8 @@ const config = {
         blog: {
           showReadingTime: true,
           editUrl: 'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
+          onInlineAuthors: 'ignore',
+          onUntruncatedBlogPosts: 'ignore',
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
@@ -57,7 +59,7 @@ const config = {
         respectPrefersColorScheme: true,
       },
       navbar: {
-        title: 'AI in K-12 Education',
+        title: 'Physical AI & Humanoid Robotics',
         logo: {
           alt: 'My Docusaurus Logo',
           src: 'img/logo.svg',
@@ -67,7 +69,7 @@ const config = {
             type: 'doc',
             docId: 'intro',
             position: 'left',
-            label: 'Research Paper',
+            label: 'Book',
           },
           {
             to: '/chatbot',
@@ -78,6 +80,22 @@ const config = {
             to: '/blog',
             label: 'Blog',
             position: 'left'
+          },
+          {
+            type: 'dropdown',
+            label: '🌐 Translate',
+            position: 'right',
+            items: [
+              {
+                label: 'English to Urdu',
+                to: '#',
+              },
+              {
+                label: '_urdu_to_english',
+                to: '#',
+                className: 'd-none', // Hidden option for now
+              },
+            ],
           },
           {
             href: 'https://github.com/Umair231183',
@@ -93,7 +111,7 @@ const config = {
             title: 'Docs',
             items: [
               {
-                label: 'Research Paper',
+                label: 'Book',
                 to: '/docs/intro',
               },
               {

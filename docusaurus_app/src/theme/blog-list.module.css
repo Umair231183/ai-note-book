@@ -1,0 +1,162 @@
+.blogHeader {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 4rem 0;
+  color: white;
+  margin-bottom: 2rem;
+}
+
+.header {
+  position: relative;
+}
+
+.header::after {
+  content: '';
+  position: absolute;
+  bottom: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 2px;
+}
+
+.title {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.subtitle {
+  font-size: 1.2rem;
+  opacity: 0.9;
+  margin-bottom: 2rem;
+}
+
+.headerButtons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.blogContent {
+  padding: 2rem 0;
+}
+
+.blogGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.blogCard {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  overflow: hidden;
+  border: 1px solid #eef2f7;
+  position: relative;
+}
+
+.blogCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+}
+
+.cardContent {
+  padding: 2rem;
+}
+
+.cardHeader {
+  margin-bottom: 1.5rem;
+}
+
+.cardTitle {
+  margin: 0 0 1rem 0;
+  font-size: 1.5rem;
+}
+
+.cardTitle a {
+  color: #2c3e50;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.cardTitle a:hover {
+  color: #3498db;
+}
+
+.cardMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  color: #7f8c8d;
+}
+
+.cardDate {
+  font-weight: 500;
+}
+
+.cardAuthor {
+  color: #3498db;
+  font-weight: 500;
+}
+
+.cardTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.tag {
+  background: #e3f2fd;
+  color: #1976d2;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.cardExcerpt {
+  margin-bottom: 1.5rem;
+  line-height: 1.7;
+  color: #34495e;
+}
+
+.cardExcerpt p {
+  margin: 0;
+}
+
+.cardFooter {
+  display: flex;
+  justify-content: flex-start;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .blogHeader {
+    padding: 2rem 0;
+  }
+
+  .title {
+    font-size: 2rem;
+  }
+
+  .headerButtons {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .cardContent {
+    padding: 1.5rem;
+  }
+
+  .cardTitle {
+    font-size: 1.3rem;
+  }
+}

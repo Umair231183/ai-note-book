@@ -22,6 +22,7 @@ const sidebars = {
         'discussion-implications',
         'recommendations',
         'conclusion-future-work',
+        
       ],
     },
     {
@@ -29,6 +30,9 @@ const sidebars = {
       label: 'Module 2 — Robot Operating System (ROS 2)',
       items: [
         'ros2-introduction',
+        'ros2-detailed-introduction',
+        'ros2-advanced-topics',
+        'ros2-performance-optimization',
       ],
     },
     {
@@ -36,6 +40,9 @@ const sidebars = {
       label: 'Module 3 — Simulation (Gazebo, Unity, Isaac Sim)',
       items: [
         'simulation-introduction',
+        'simulation-detailed-introduction',
+        'simulation-advanced-techniques',
+        'simulation-based-learning',
       ],
     },
     {
@@ -43,6 +50,9 @@ const sidebars = {
       label: 'Module 4 — NVIDIA Isaac AI Robotics',
       items: [
         'nvidia-isaac-introduction',
+        'isaac-detailed-introduction',
+        'isaac-ai-integration',
+        'isaac-navigation-manipulation',
       ],
     },
     {
@@ -50,6 +60,9 @@ const sidebars = {
       label: 'Module 5 — Humanoid Robotics',
       items: [
         'humanoid-robotics-introduction',
+        'humanoid-robotics-detailed-introduction',
+        'humanoid-robotics-design-control',
+        'humanoid-robotics-applications',
       ],
     },
     {
@@ -57,6 +70,9 @@ const sidebars = {
       label: 'Module 6 — Conversational Robotics',
       items: [
         'conversational-robotics-introduction',
+        'conversational-robotics-detailed-introduction',
+        'conversational-robotics-nlp',
+        'conversational-robotics-social-interaction',
       ],
     },
     {
@@ -64,6 +80,9 @@ const sidebars = {
       label: 'Module 7 — Capstone Project',
       items: [
         'capstone-project-introduction',
+        'capstone-project-detailed-introduction',
+        'capstone-project-implementation',
+        'capstone-project-evaluation',
       ],
     },
   ],

@@ -1,0 +1,25 @@
+.translationToggleContainer {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+}
+
+.translationToggleLabel {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: var(--ifm-navbar-link-color);
+}
+
+.translationToggleLabel:hover {
+  color: var(--ifm-navbar-link-hover-color);
+}
+
+.translationToggleInput {
+  margin-right: 0.25rem;
+}
+
+.translationToggleText {
+  font-weight: 500;
+}

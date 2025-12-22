@@ -1,8 +1,9 @@
-from pydantic import BaseModel, Field
-from typing import Optional
+from pydantic import BaseModel
+from typing import List, Optional
+from datetime import datetime
 
 class Module(BaseModel):
-    module_id: str = Field(..., description="Unique identifier for the module.")
-    textbook_id: str = Field(..., description="Foreign key to the Textbook this module belongs to.")
-    title: str = Field(..., description="Title of the module.")
-    order: int = Field(..., description="Sequential order of the module within the textbook.")
+    module_id: str
+    textbook_id: str
+    title: str
+    order: int

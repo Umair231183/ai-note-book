@@ -14,6 +14,7 @@ This plan outlines the development of an AI-native textbook on Physical AI & Hum
 **Storage**: Qdrant for vector embeddings (textbook content); Neon PostgreSQL for user profiles and application logs.
 **Testing**: Backend (Python): `pytest`; Frontend (JavaScript): `Jest`, `React Testing Library`.
 **Target Platform**: Web (browser) for frontend; Linux/containerized environment for FastAPI backend (e.g., Docker, cloud platforms).
+**Project Type**: Web application (frontend + backend)
 **Performance Goals**: RAG query response time p95 < 3 seconds; Textbook page load time p95 < 1 second; Real-time streaming responses for chatbot.
 **Constraints**: Textbook content must be highly readable and student-friendly; Avoid technical jargon unless explicitly explained; All code examples must be runnable and syntactically correct; RAG components must strictly adhere to context-bound rules to prevent hallucinations, with citations for all answers; Subagent logic must be modular and independently testable; Each chapter must include: Learning Outcomes, Introduction, Core Theory, Practical Implementation, Hands-on Labs, Real-World Applications, Key Takeaways, Quiz.
 **Scale/Scope**: Development of a multi-module textbook; Full integration of a RAG chatbot; Optional implementation of personalization features (e.g., recommendations, user preferences); Optional per-chapter Urdu translation; Optional development of reusable AI Subagents and Agent Skills.
@@ -62,7 +63,7 @@ docusaurus_app/
 │       ├── api/        # FastAPI API endpoints
 │       └── services/   # RAG specific services, e.g., vector DB access, LLM orchestration
 ├── src/                # Docusaurus source code (frontend)
-│   ├── cahtobot/       # Contains rag_chatbot.py (can be moved into backend or used as library)
+│   ├── chatbot/       # Contains rag_chatbot.py (can be moved into backend or used as library)
 │   ├── components/     # React components, e.g., ChatbotUI.js
 │   ├── pages/          # Docusaurus pages (index.js, chatbot.js)
 │   └── css/            # Custom CSS for Docusaurus

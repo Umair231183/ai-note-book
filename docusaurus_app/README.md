@@ -1,76 +1,95 @@
-# AI-Native Textbook on Physical AI & Humanoid Robotics
+# PAHR Textbook and RAG Chatbot
 
-This project is an AI-native technical textbook focused on Physical AI and Humanoid Robotics, built using Docusaurus. It features an integrated Retrieval-Augmented Generation (RAG) AI Tutor, powered by a FastAPI backend, Qdrant vector store, Neon Postgres database, and OpenAI/ChatKit Agents.
+This project consists of two main components:
+1. A FastAPI backend that handles the RAG (Retrieval-Augmented Generation) functionality
+2. A Docusaurus frontend that serves as the textbook interface with an integrated chatbot
 
-## Project Overview
+## Prerequisites
 
-The goal is to provide an accessible, high-quality, and interactive learning experience for students ranging from beginners to advanced levels. Key features include:
+Before starting the application, ensure you have the following installed:
+- Python 3.10+
+- Node.js 18+
+- npm or yarn
 
-*   **Multi-module Textbook**: Structured content on Physical AI, ROS2, Simulation, NVIDIA Isaac, Humanoid Robotics, Conversational Robotics, and a Capstone Project.
-*   **RAG AI Tutor**: A conversational chatbot that answers questions strictly from the textbook content, providing citations.
-*   **Modern UI/UX**: Clean, minimal, and responsive design for optimal readability.
-*   **Personalization (Bonus)**: Features for personalized chapter recommendations and content adaptation.
-*   **Urdu Translation (Bonus)**: Dynamic, per-chapter Urdu translation capabilities.
-*   **AI Subagents (Bonus)**: Reusable AI agents for content generation, review, and skill execution.
+## Environment Setup
 
-## Getting Started
+1. Create a `.env` file in the `docusaurus_app/backend/` directory with the following variables:
+```
+OPENAI_API_KEY=your_openai_api_key_here
+QDRANT_URL=your_qdrant_url_here  # Optional, defaults to in-memory for development
+QDRANT_API_KEY=your_qdrant_api_key_here  # Optional
+NEON_DATABASE_URL=your_neon_database_url_here
+```
 
-### Prerequisites
+2. Install backend dependencies:
+```bash
+cd docusaurus_app/backend
+pip install -r requirements.txt
+```
 
-*   Node.js (v18 or higher)
-*   Python (v3.10 or higher)
-*   `pip` and `npm` package managers
-*   An OpenAI API Key (set as `OPENAI_API_KEY` environment variable)
-*   Access to Qdrant Cloud (or local Qdrant instance)
-*   Access to Neon Serverless Postgres
+3. Install frontend dependencies:
+```bash
+cd docusaurus_app
+npm install
+```
 
-### Installation
+## Starting the Application
 
-1.  **Clone the repository:**
-    ```bash
-    git clone https://github.com/Umair231183/ai-robotic-book-hackatone-01.git # Replace with actual repo URL
-    cd ai-robotic-book-hackatone-01/docusaurus_app
-    ```
+### Method 1: Using the batch script (Windows)
+Run the following command from the project root directory:
+```bash
+start-servers.bat start
+```
 
-2.  **Frontend (Docusaurus) Setup:**
-    ```bash
-    npm install
-    ```
+### Method 2: Manual start
+1. Start the backend server:
+```bash
+cd docusaurus_app/backend
+python -m uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+```
 
-3.  **Backend (FastAPI) Setup:**
-    ```bash
-    cd backend
-    pip install -r requirements.txt
-    ```
+2. In a new terminal, start the frontend server:
+```bash
+cd docusaurus_app
+npm run start
+```
 
-### Running Locally
+## Accessing the Application
 
-1.  **Set Environment Variables:**
-    Create a `.env` file in the `docusaurus_app/backend/` directory based on `.env.example`.
-    ```
-    OPENAI_API_KEY="sk-YOUR_OPENAI_API_KEY"
-    QDRANT_URL="http://localhost:6333" # Or your Qdrant Cloud URL
-    QDRANT_API_KEY="your_qdrant_api_key" # If using Qdrant Cloud
-    NEON_DATABASE_URL="postgresql://user:password@host/dbname" # Your Neon Postgres connection string
-    ```
+- Frontend (Docusaurus): http://localhost:3000
+- Backend (FastAPI): http://localhost:8000
+- Backend API Documentation: http://localhost:8000/docs
+- Chatbot Interface: http://localhost:3000/chatbot
 
-2.  **Start Backend:**
-    Navigate to `docusaurus_app/backend/` and run:
-    ```bash
-    uvicorn main:app --host 0.0.0.0 --port 8000
-    ```
+## Troubleshooting
 
-3.  **Start Frontend:**
-    In a separate terminal, navigate to `docusaurus_app/` and run:
-    ```bash
-    npm start
-    ```
-    The Docusaurus site should open in your browser at `http://localhost:3000/`.
+If you encounter any issues:
 
-## Deployment
+1. Make sure all environment variables are properly set
+2. Check that the required dependencies are installed
+3. Verify that ports 8000 and 3000 are not being used by other applications
+4. Check the console output of both servers for error messages
 
-Refer to the CI/CD workflow files in `.github/workflows/` for GitHub Pages (frontend) and backend cloud platform deployments. Detailed instructions for Qdrant Cloud and Neon Postgres setup can be found in `specs/001-pahr-textbook-rag/quickstart.md`.
+## Project Structure
 
-## Contributing
-
-Contributions are welcome! Please refer to the project's [Constitution](./.specify/memory/constitution.md) and [Specification](./specs/001-pahr-textbook-rag/spec.md) for guidelines.
+```
+docusaurus_app/                 # Main project directory
+├── backend/                    # FastAPI backend
+│   ├── main.py                 # Main application entry point
+│   ├── requirements.txt        # Python dependencies
+│   └── src/
+│       ├── models/             # Data models
+│       ├── services/           # Business logic
+│       │   ├── rag_service.py  # RAG implementation
+│       │   └── vector_store_service.py  # Vector store interface
+│       ├── chatbot/            # Chatbot components
+│       └── agents/             # AI agents
+├── src/                        # Docusaurus source files
+│   ├── components/             # React components
+│   ├── pages/                  # Page components
+│   │   └── chatbot.js          # Chatbot page
+│   └── css/                    # Custom CSS
+├── docs/                       # Documentation
+├── docusaurus.config.js        # Docusaurus configuration
+└── package.json                # Node.js dependencies
+```

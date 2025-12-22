@@ -130,13 +130,13 @@ Stores personalization settings for a User.
 
 ## Relationships Summary
 
-*   `User` 1 --\* `UserPreference`
-*   `User` 1 --\* `ChatSession`
-*   `ChatSession` 1 --\* `ChatMessage`
-*   `Textbook` 1 --\* `Module`
-*   `Module` 1 --\* `Chapter`
-*   `Chapter` 1 --\* `ChapterEmbedding`
-*   `Chapter` \* -- \* `UserPreference` (for chapter-specific personalization)
+*   `User` 1 --* `UserPreference`
+*   `User` 1 --* `ChatSession`
+*   `ChatSession` 1 --* `ChatMessage`
+*   `Textbook` 1 --* `Module`
+*   `Module` 1 --* `Chapter`
+*   `Chapter` 1 --* `ChapterEmbedding`
+*   `Chapter` * -- * `UserPreference` (for chapter-specific personalization)
 
 ## Data Flow (High-Level)
 
