@@ -6,8 +6,8 @@ const darkCodeTheme = themes.dracula;
 const config = {
   title: 'Physical AI & Humanoid Robotics',
   tagline: 'Research Paper and Resources',
-  url: 'https://Umair231183.github.io',
-  baseUrl: '/ai-notebook-frontend/',
+  url: 'https://ai-note-book-rkas.vercel.app/',
+  baseUrl: '/',
   onBrokenLinks: 'throw',
   customFields: {
     metadata: [{name: 'keywords', content: 'Physical AI & Humanoid Robotics, Classroom Efficiency, Research Paper, RAG Chatbot, Docusaurus'}],
