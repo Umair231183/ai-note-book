@@ -11,7 +11,7 @@ const config = {
   onBrokenLinks: 'throw',
   customFields: {
     metadata: [{name: 'keywords', content: 'Physical AI & Humanoid Robotics, Classroom Efficiency, Research Paper, RAG Chatbot, Docusaurus'}],
-    FASTAPI_BASE_URL: process.env.FASTAPI_BASE_URL || '', // Expose to client-side
+    FASTAPI_BASE_URL: process.env.FASTAPI_BASE_URL || 'http://localhost:8000', // Expose to client-side
   },
   markdown: {
     mermaid: true,
