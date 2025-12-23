@@ -9,11 +9,11 @@ import Translate from '@docusaurus/Translate';
 import styles from './blog-post.module.css';
 
 function BlogPostPage(props) {
-  const {content: BlogPostContents, sidebar, frontMatter} = props;
+  const { content: BlogPostContents, sidebar, frontMatter } = props;
   const {
     nextItem,
     prevItem,
-    metadata: {title, description},
+    metadata: { title, description },
   } = BlogPostContents;
 
   return (
@@ -22,8 +22,9 @@ function BlogPostPage(props) {
       pageClassName="blog-post-page"
       title={title}
       description={description}
-      keywords={frontMatter.keywords}
-      image={frontMatter.image}>
+      keywords={frontMatter?.keywords ?? BlogPostContents.metadata.tags ?? []}
+      image={frontMatter?.image ?? '/img/default-blog.png'}
+    >
       <BlogPostPageMetadata {...props} />
       <div className={styles.blogPostHeader}>
         <div className="container">

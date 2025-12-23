@@ -7,6 +7,7 @@ authors:
     url: https://github.com/Umair231183
     image_url: https://github.com/Umair231183.png
 tags: [future, ai, classroom]
+
 ---
 
 As we look toward the future, AI's role in K-12 education is poised to expand significantly. Our research provides insights into what the next decade might hold for AI-enhanced learning environments.

@@ -1,7 +1,14 @@
 ---
 slug: first-post
 title: First Post
-tags: [docusaurus, blog]
+tags:
+  - docusaurus
+  - blog
+keywords:
+  - docusaurus
+  - blog
+  - first post
+image: /img/blog/first-post.png
 ---
 
 This is the very first post on this blog.
