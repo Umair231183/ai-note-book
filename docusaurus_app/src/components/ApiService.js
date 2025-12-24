@@ -4,11 +4,9 @@ import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 export const useApiService = () => {
   const { siteConfig } = useDocusaurusContext();
 
-  // ✅ Normalize base URL (NO double slash bug)
-  const RAW_BASE_URL =
-    siteConfig.customFields.FASTAPI_BASE_URL || 'http://localhost:8000';
-
-  const API_BASE_URL = RAW_BASE_URL.replace(/\/$/, '');
+  // ✅ Base URL (from Docusaurus config or fallback)
+  const RAW_BASE_URL = siteConfig.customFields.FASTAPI_BASE_URL || 'http://localhost:8000';
+  const API_BASE_URL = RAW_BASE_URL.replace(/\/$/, ''); // Remove trailing slash
 
   // -------------------------
   // Health check
@@ -20,17 +18,13 @@ export const useApiService = () => {
   }, [API_BASE_URL]);
 
   // -------------------------
-  // Query
+  // General query
   // -------------------------
   const query = useCallback(async (question, onStreamUpdate) => {
     const res = await fetch(`${API_BASE_URL}/api/query`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-         question   // ✅ FIXED (backend expects `query`)
-      })
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ question }) // ✅ backend expects `question`
     });
 
     if (!res.ok) {
@@ -39,28 +33,24 @@ export const useApiService = () => {
 
     const data = await res.json();
 
-    if (onStreamUpdate) {
-      onStreamUpdate(data.text);
-    }
+    if (onStreamUpdate) onStreamUpdate(data.llm_answer);
 
     return {
-      text: data.text,
+      text: data.llm_answer,
       sourceDocuments: data.source_documents || []
     };
   }, [API_BASE_URL]);
 
   // -------------------------
-  // Ask selected
+  // Ask about selected text
   // -------------------------
   const askSelected = useCallback(async (selectedText, question, onStreamUpdate) => {
     const res = await fetch(`${API_BASE_URL}/api/ask-selected`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         selected_text: selectedText,
-        query: question   // ✅ FIXED
+        question // ✅ backend expects `question`
       })
     });
 
@@ -70,12 +60,10 @@ export const useApiService = () => {
 
     const data = await res.json();
 
-    if (onStreamUpdate) {
-      onStreamUpdate(data.text);
-    }
+    if (onStreamUpdate) onStreamUpdate(data.llm_answer);
 
     return {
-      text: data.text,
+      text: data.llm_answer,
       sourceDocuments: data.source_documents || []
     };
   }, [API_BASE_URL]);
