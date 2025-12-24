@@ -1,3 +1,4 @@
+require('dotenv').config();
 const {themes} = require('prism-react-renderer');
 const lightCodeTheme = themes.github;
 const darkCodeTheme = themes.dracula;
@@ -6,7 +7,7 @@ const darkCodeTheme = themes.dracula;
 const config = {
   title: 'Physical AI & Humanoid Robotics',
   tagline: 'Research Paper and Resources',
-  url: 'https://ai-note-book-rkas.vercel.app/',
+  url: 'https://ai-note-book-rkas.vercel.app',
   baseUrl: '/',
   onBrokenLinks: 'throw',
   customFields: {

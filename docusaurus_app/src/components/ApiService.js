@@ -9,6 +9,7 @@ export const useApiService = () => {
   // Health check endpoint
   const healthCheck = useCallback(async () => {
     try {
+      console.log('Making health check request to:', `${API_BASE_URL}/api/health`);
       const response = await fetch(`${API_BASE_URL}/api/health`, {
         method: 'GET',
         headers: {
@@ -16,11 +17,14 @@ export const useApiService = () => {
         },
       });
 
+      console.log('Health check response status:', response.status);
       if (!response.ok) {
         throw new Error(`Health check failed with status: ${response.status}`);
       }
 
-      return await response.json();
+      const data = await response.json();
+      console.log('Health check response data:', data);
+      return data;
     } catch (error) {
       console.error('Health check error:', error);
       throw error;
@@ -30,6 +34,8 @@ export const useApiService = () => {
   // Query endpoint for general questions - with streaming support
   const query = useCallback(async (question, onStreamUpdate) => {
     try {
+      console.log('Making query request to:', `${API_BASE_URL}/api/query`);
+      console.log('Question:', question);
       const response = await fetch(`${API_BASE_URL}/api/query`, {
         method: 'POST',
         headers: {
@@ -38,6 +44,7 @@ export const useApiService = () => {
         body: JSON.stringify({ question }),
       });
 
+      console.log('Query response status:', response.status);
       if (!response.ok) {
         throw new Error(`Query request failed with status: ${response.status}`);
       }
@@ -47,6 +54,7 @@ export const useApiService = () => {
       if (contentType && contentType.includes('application/json')) {
         // Handle JSON response
         const data = await response.json();
+        console.log('Query response data:', data);
         let cleanText = data.llm_answer || data.text || data.response || '';
 
         // Filter out storage compatibility messages
@@ -115,6 +123,9 @@ export const useApiService = () => {
   // Ask-selected endpoint for questions about selected text - with streaming support
   const askSelected = useCallback(async (selectedText, question, onStreamUpdate) => {
     try {
+      console.log('Making ask-selected request to:', `${API_BASE_URL}/api/ask-selected`);
+      console.log('Selected text:', selectedText);
+      console.log('Question:', question);
       const response = await fetch(`${API_BASE_URL}/api/ask-selected`, {
         method: 'POST',
         headers: {
@@ -126,6 +137,7 @@ export const useApiService = () => {
         }),
       });
 
+      console.log('Ask-selected response status:', response.status);
       if (!response.ok) {
         throw new Error(`Ask selected request failed with status: ${response.status}`);
       }
@@ -135,6 +147,7 @@ export const useApiService = () => {
       if (contentType && contentType.includes('application/json')) {
         // Handle JSON response
         const data = await response.json();
+        console.log('Ask-selected response data:', data);
         let cleanText = data.llm_answer || data.text || data.response || '';
 
         // Filter out storage compatibility messages
@@ -189,6 +202,7 @@ export const useApiService = () => {
           cleanFinalText = cleanFinalText.replace(/\s+/g, ' ').trim(); // Clean up extra spaces
         }
 
+        console.log('Ask-selected final response text:', cleanFinalText);
         return { text: cleanFinalText };
       }
     } catch (error) {
