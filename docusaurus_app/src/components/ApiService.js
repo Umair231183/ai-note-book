@@ -29,7 +29,7 @@ export const useApiService = () => {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        query: question   // ✅ FIXED (backend expects `query`)
+         question   // ✅ FIXED (backend expects `query`)
       })
     });
 
