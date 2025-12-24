@@ -7,7 +7,7 @@ const darkCodeTheme = themes.dracula;
 const config = {
   title: 'Physical AI & Humanoid Robotics',
   tagline: 'Research Paper and Resources',
-  url: 'https://ai-note-book-rkas.vercel.app',
+  url: 'https://ai-note-book-rkas-f3gyxd9vg-hafizmuhammadumairs-projects.vercel.app',
   baseUrl: '/',
   onBrokenLinks: 'throw',
   customFields: {

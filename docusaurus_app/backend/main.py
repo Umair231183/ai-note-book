@@ -14,7 +14,7 @@ app = FastAPI(title="PAHR RAG Chatbot API", version="1.0.0")
 # Add CORS middleware to allow requests from the frontend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://ai-note-book-rkas.vercel.app/"],  # Allow all origins for development
+    allow_origins=["https://ai-note-book-rkas-f3gyxd9vg-hafizmuhammadumairs-projects.vercel.app/"],  # Allow all origins for development
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
