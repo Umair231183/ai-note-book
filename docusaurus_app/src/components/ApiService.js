@@ -1,246 +1,89 @@
 import { useCallback } from 'react';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 
-// Custom hook that provides API service functions
 export const useApiService = () => {
-  const {siteConfig} = useDocusaurusContext();
-  const API_BASE_URL = siteConfig.customFields.FASTAPI_BASE_URL || 'http://localhost:8000';
+  const { siteConfig } = useDocusaurusContext();
 
-  // Health check endpoint
+  // ✅ Normalize base URL (NO double slash bug)
+  const RAW_BASE_URL =
+    siteConfig.customFields.FASTAPI_BASE_URL || 'http://localhost:8000';
+
+  const API_BASE_URL = RAW_BASE_URL.replace(/\/$/, '');
+
+  // -------------------------
+  // Health check
+  // -------------------------
   const healthCheck = useCallback(async () => {
-    try {
-      console.log('Making health check request to:', `${API_BASE_URL}/api/health`);
-      const response = await fetch(`${API_BASE_URL}/api/health`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-
-      console.log('Health check response status:', response.status);
-      if (!response.ok) {
-        throw new Error(`Health check failed with status: ${response.status}`);
-      }
-
-      const data = await response.json();
-      console.log('Health check response data:', data);
-      return data;
-    } catch (error) {
-      console.error('Health check error:', error);
-      throw error;
-    }
+    const res = await fetch(`${API_BASE_URL}/api/health`);
+    if (!res.ok) throw new Error("Health check failed");
+    return res.json();
   }, [API_BASE_URL]);
 
-  // Query endpoint for general questions - with streaming support
+  // -------------------------
+  // Query
+  // -------------------------
   const query = useCallback(async (question, onStreamUpdate) => {
-    try {
-      console.log('Making query request to:', `${API_BASE_URL}/api/query`);
-      console.log('Question:', question);
-      const response = await fetch(`${API_BASE_URL}/api/query`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ question }),
-      });
+    const res = await fetch(`${API_BASE_URL}/api/query`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        query: question   // ✅ FIXED (backend expects `query`)
+      })
+    });
 
-      console.log('Query response status:', response.status);
-      if (!response.ok) {
-        throw new Error(`Query request failed with status: ${response.status}`);
-      }
-
-      // Check if the response is JSON or text stream
-      const contentType = response.headers.get('content-type');
-      if (contentType && contentType.includes('application/json')) {
-        // Handle JSON response
-        const data = await response.json();
-        console.log('Query response data:', data);
-        let cleanText = data.llm_answer || data.text || data.response || '';
-
-        // Filter out storage compatibility messages
-        if (cleanText.includes('storage compatibility issue')) {
-          cleanText = cleanText.replace(/Note: Content retrieval not available due to storage compatibility issue/g, '').trim();
-          cleanText = cleanText.replace(/\s+/g, ' ').trim(); // Clean up extra spaces
-        }
-
-        if (onStreamUpdate) {
-          onStreamUpdate(cleanText);
-        }
-        return {
-          text: cleanText,
-          sourceDocuments: (data.source_documents || []).filter(doc =>
-            !doc.includes('storage compatibility issue')
-          )
-        };
-      } else {
-        // Handle text stream response
-        const reader = response.body.getReader();
-        const decoder = new TextDecoder();
-        let receivedText = '';
-
-        while (true) {
-          const { value, done } = await reader.read();
-          if (done) break;
-
-          const chunk = decoder.decode(value, { stream: true });
-          receivedText += chunk;
-
-          // Call the callback with updated text for real-time updates
-          if (onStreamUpdate) {
-            // Clean the text by removing "llm_answer:" prefix if present
-            let cleanText = receivedText.replace(/^llm_answer:\s*/, '');
-
-            // Filter out storage compatibility messages
-            if (cleanText.includes('storage compatibility issue')) {
-              cleanText = cleanText.replace(/Note: Content retrieval not available due to storage compatibility issue/g, '').trim();
-              cleanText = cleanText.replace(/\s+/g, ' ').trim(); // Clean up extra spaces
-            }
-
-            onStreamUpdate(cleanText);
-          }
-        }
-
-        // Clean the final text by removing "llm_answer:" prefix if present
-        let cleanFinalText = receivedText.replace(/^llm_answer:\s*/, '');
-
-        // Filter out storage compatibility messages
-        if (cleanFinalText.includes('storage compatibility issue')) {
-          cleanFinalText = cleanFinalText.replace(/Note: Content retrieval not available due to storage compatibility issue/g, '').trim();
-          cleanFinalText = cleanFinalText.replace(/\s+/g, ' ').trim(); // Clean up extra spaces
-        }
-
-        // Try to get source documents from the response if available
-        // For text streams, we need to check if there's a way to get source docs
-        // This depends on how your backend sends the data
-        return { text: cleanFinalText, sourceDocuments: [] };
-      }
-    } catch (error) {
-      console.error('Query error:', error);
-      throw error;
+    if (!res.ok) {
+      throw new Error("Query failed");
     }
+
+    const data = await res.json();
+
+    if (onStreamUpdate) {
+      onStreamUpdate(data.text);
+    }
+
+    return {
+      text: data.text,
+      sourceDocuments: data.source_documents || []
+    };
   }, [API_BASE_URL]);
 
-  // Ask-selected endpoint for questions about selected text - with streaming support
+  // -------------------------
+  // Ask selected
+  // -------------------------
   const askSelected = useCallback(async (selectedText, question, onStreamUpdate) => {
-    try {
-      console.log('Making ask-selected request to:', `${API_BASE_URL}/api/ask-selected`);
-      console.log('Selected text:', selectedText);
-      console.log('Question:', question);
-      const response = await fetch(`${API_BASE_URL}/api/ask-selected`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          selected_text: selectedText,
-          question: question,
-        }),
-      });
+    const res = await fetch(`${API_BASE_URL}/api/ask-selected`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        selected_text: selectedText,
+        query: question   // ✅ FIXED
+      })
+    });
 
-      console.log('Ask-selected response status:', response.status);
-      if (!response.ok) {
-        throw new Error(`Ask selected request failed with status: ${response.status}`);
-      }
-
-      // Check if the response is JSON or text stream
-      const contentType = response.headers.get('content-type');
-      if (contentType && contentType.includes('application/json')) {
-        // Handle JSON response
-        const data = await response.json();
-        console.log('Ask-selected response data:', data);
-        let cleanText = data.llm_answer || data.text || data.response || '';
-
-        // Filter out storage compatibility messages
-        if (cleanText.includes('storage compatibility issue')) {
-          cleanText = cleanText.replace(/Note: Content retrieval not available due to storage compatibility issue/g, '').trim();
-          cleanText = cleanText.replace(/\s+/g, ' ').trim(); // Clean up extra spaces
-        }
-
-        if (onStreamUpdate) {
-          onStreamUpdate(cleanText);
-        }
-        return {
-          text: cleanText,
-          sourceDocuments: (data.source_documents || []).filter(doc =>
-            !doc.includes('storage compatibility issue')
-          )
-        };
-      } else {
-        // Handle text stream response
-        const reader = response.body.getReader();
-        const decoder = new TextDecoder();
-        let receivedText = '';
-
-        while (true) {
-          const { value, done } = await reader.read();
-          if (done) break;
-
-          const chunk = decoder.decode(value, { stream: true });
-          receivedText += chunk;
-
-          // Call the callback with updated text for real-time updates
-          if (onStreamUpdate) {
-            // Clean the text by removing "llm_answer:" prefix if present
-            let cleanText = receivedText.replace(/^llm_answer:\s*/, '');
-
-            // Filter out storage compatibility messages
-            if (cleanText.includes('storage compatibility issue')) {
-              cleanText = cleanText.replace(/Note: Content retrieval not available due to storage compatibility issue/g, '').trim();
-              cleanText = cleanText.replace(/\s+/g, ' ').trim(); // Clean up extra spaces
-            }
-
-            onStreamUpdate(cleanText);
-          }
-        }
-
-        // Clean the final text by removing "llm_answer:" prefix if present
-        let cleanFinalText = receivedText.replace(/^llm_answer:\s*/, '');
-
-        // Filter out storage compatibility messages
-        if (cleanFinalText.includes('storage compatibility issue')) {
-          cleanFinalText = cleanFinalText.replace(/Note: Content retrieval not available due to storage compatibility issue/g, '').trim();
-          cleanFinalText = cleanFinalText.replace(/\s+/g, ' ').trim(); // Clean up extra spaces
-        }
-
-        console.log('Ask-selected final response text:', cleanFinalText);
-        return { text: cleanFinalText };
-      }
-    } catch (error) {
-      console.error('Ask selected error:', error);
-      throw error;
+    if (!res.ok) {
+      throw new Error("Ask-selected failed");
     }
-  }, [API_BASE_URL]);
 
-  // Ingest-content endpoint for content ingestion
-  const ingestContent = useCallback(async (content, metadata = {}) => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/api/ingest-content`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          content,
-          metadata,
-        }),
-      });
+    const data = await res.json();
 
-      if (!response.ok) {
-        throw new Error(`Content ingestion failed with status: ${response.status}`);
-      }
-
-      return await response.json();
-    } catch (error) {
-      console.error('Content ingestion error:', error);
-      throw error;
+    if (onStreamUpdate) {
+      onStreamUpdate(data.text);
     }
+
+    return {
+      text: data.text,
+      sourceDocuments: data.source_documents || []
+    };
   }, [API_BASE_URL]);
 
   return {
+    API_BASE_URL,
     healthCheck,
     query,
-    askSelected,
-    ingestContent,
-    API_BASE_URL
+    askSelected
   };
 };
